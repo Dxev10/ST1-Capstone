@@ -121,7 +121,7 @@ st.pyplot(fig3)
 st.header("PDA")
 
 # Data to predict with
-X = np.array(df[['FGA', 'MP']])
+X = np.array(df[['FGA', 'MP', 'AST']])
 # Data that is being predicted
 Y = np.array(df['PTS'])
 
@@ -130,20 +130,21 @@ model = LinearRegression().fit(X, Y)
 
 
 # Prediction  Function
-def predict_points(fga, min):
-    new_data = np.array([[fga, min]])  # new data values
+def predict_points(fga, min, ast):
+    new_data = np.array([[fga, min, ast]])  # new data values
     predicted_points = model.predict(new_data)  # defining new values with prediction statement based on sample data
     return round(predicted_points[0], 1)  # returning values
 
 # inputs
-st.write("Enter the total field goal attempts and minutes played to predict points per game:")
+st.write("Enter the total field goal attempts, assists and minutes played to predict points per game:")
 fga = st.number_input("Field goal attempts")
-min = st.number_input("Minutes played")
+ast = st.number_input("Total assists")
+min = st.slider("Minutes played", max_value=48)
 
 
 # Output
 if st.button("Predict"):
-    predicted_points = predict_points(fga, min)
+    predicted_points = predict_points(fga, min, ast)
     st.write("Predicted points per game: ", predicted_points)
 
 
